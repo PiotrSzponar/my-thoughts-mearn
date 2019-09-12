@@ -5,11 +5,11 @@ const initAdmin = require('./utils/initAdmin');
 dotenv.config({ path: './config/dev.env' });
 
 // Unclean state e.g. missing variable
-// process.on('uncaughtException', err => {
-//   console.log('UNCAUGHT EXCEPTION! Shutting down...');
-//   console.log(`${err.name}: ${err.message}`);
-//   process.exit(1);
-// });
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! Shutting down...');
+  console.log(`${err.name}: ${err.message}`);
+  process.exit(1);
+});
 
 const app = require('./app');
 
@@ -28,7 +28,7 @@ mongoose
     console.log('DB connection ok!');
   });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });

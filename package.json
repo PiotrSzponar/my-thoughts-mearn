@@ -4,8 +4,12 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "cross-env NODE_ENV=production nodemon server.js"
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "server:prod": "cross-env NODE_ENV=production nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "prod": "concurrently \"npm run server:prod\" \"npm run client\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -32,8 +36,9 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "concurrently": "^4.1.2",
     "cross-env": "^5.2.0",
-    "eslint": "^6.1.0",
+    "eslint": "^6.3.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
