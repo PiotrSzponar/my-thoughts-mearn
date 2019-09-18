@@ -61,7 +61,7 @@ exports.signup = catchAsync(async (req, res, next) => {
         422,
         validationResult(req)
           .formatWith(({ msg }) => msg)
-          .mapped()
+          .array()
       )
     );
   }

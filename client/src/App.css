@@ -1,1 +1,5 @@
 @import '~antd/dist/antd.css';
+
+.ant-alert-message {
+  white-space: pre;
+}

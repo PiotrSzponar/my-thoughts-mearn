@@ -1,0 +1,18 @@
+.bg {
+  // height: calc(100vh - 64px) !important;
+  height: 100vh !important;
+  background: url('../../img/landing.jpg') no-repeat center center/cover;
+}
+
+.leadText {
+  margin-top: 64px;
+  text-align: center;
+
+  & > * {
+    color: #fff !important;
+  }
+}
+
+.buttons {
+  margin-top: 30px;
+}

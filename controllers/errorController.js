@@ -7,7 +7,7 @@ const handleCastErrorDB = err => {
 
 const handleDuplicateFieldsDB = err => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  const message = `Duplicate field value: ${value}. Please use another value!`;
+  const message = `${value} is already taken. Please use a different value.`;
   return new AppError(message, 400);
 };
 
@@ -15,6 +15,11 @@ const handleValidationErrorDB = err => {
   const errors = Object.values(err.errors).map(el => el.message);
 
   const message = `Invalid input data. ${errors.join('. ')}`;
+  return new AppError(message, 400);
+};
+
+const handleValidationError = err => {
+  const message = `${err.errors.join('\n')}`;
   return new AppError(message, 400);
 };
 
@@ -71,6 +76,7 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'CastError') error = handleCastErrorDB(error);
     if (err.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
+    if (err.statusCode === 422) error = handleValidationError(error);
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
     if (err.code === 'LIMIT_UNEXPECTED_FILE') error = handleMulterCountFiles();
