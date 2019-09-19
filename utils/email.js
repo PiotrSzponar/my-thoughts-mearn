@@ -13,19 +13,19 @@ module.exports = class Email {
   // DEV: Trapmail
   // PROD: SendGrid
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
-      // Sendgrid
-      return nodemailer.createTransport({
-        service: 'Sendgrid',
-        auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      });
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   // Sendgrid
+    //   return nodemailer.createTransport({
+    //     service: 'Sendgrid',
+    //     auth: {
+    //       user: process.env.SENDGRID_USERNAME,
+    //       pass: process.env.SENDGRID_PASSWORD
+    //     },
+    //     tls: {
+    //       rejectUnauthorized: false
+    //     }
+    //   });
+    // }
 
     // Trapmail
     return nodemailer.createTransport({

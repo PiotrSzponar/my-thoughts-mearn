@@ -75,6 +75,9 @@ router.patch(
 // After this MW - only for logged in users
 router.use(authController.protect);
 
+// Authenticate a user
+router.get('/auth', userController.authUser);
+
 // Find users
 router.get('/search', userController.search);
 

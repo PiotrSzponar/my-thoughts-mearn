@@ -16,6 +16,20 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+// Authenticate user
+exports.authUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select(
+    'name photo isVerified isCompleted'
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});
+
 // Search users by name, city or bio
 exports.search = catchAsync(async (req, res, next) => {
   const q = req.query.q.trim();
@@ -220,18 +234,16 @@ exports.completeProfile = catchAsync(async (req, res, next) => {
     );
   }
   // Filtered out unwanted fields names that are not allowed to be updated, remove empties
-  const filteredBody =
-    req.route.path === '/me' &&
-    filterObj(
-      req.body,
-      'gender',
-      'birthDate',
-      'bio',
-      'country',
-      'city',
-      'isHidden',
-      'deletePhoto'
-    );
+  const filteredBody = filterObj(
+    req.body,
+    'gender',
+    'birthDate',
+    'bio',
+    'country',
+    'city',
+    'isHidden',
+    'deletePhoto'
+  );
   if (req.body.name) filteredBody.name = req.body.name;
 
   // Mark user profile as completed

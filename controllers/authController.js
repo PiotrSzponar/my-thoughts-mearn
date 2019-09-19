@@ -85,18 +85,10 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   await new Email(newUser, verificationURL).sendVerification();
 
-  newUser.password = undefined;
-  newUser.isVerified = undefined;
-  newUser.isHidden = undefined;
-  newUser.isActive = undefined;
-  newUser.isCompleted = undefined;
-
   res.status(201).json({
     status: 'success',
-    message: 'User created and verification token sent to email!',
-    data: {
-      user: newUser
-    }
+    message:
+      'An email confirmation has been sent to you. Please check your inbox and click the confirmation link.'
   });
 });
 
@@ -175,17 +167,22 @@ exports.signin = catchAsync(async (req, res, next) => {
 
   // Check if user exists or password is correct
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
+    return next(new AppError('Incorrect email or password!', 401));
   }
   if (!user.isActive) {
-    return next(new AppError('User is not active', 400));
+    return next(new AppError('User has been deleted.', 400));
   }
   if (!user.isVerified) {
-    return next(new AppError('User is not verified', 400));
+    return next(new AppError('Not verified', 400));
   }
   // Check if user used local login method
   if (user.method !== 'local') {
-    return next(new AppError('User used social login', 400));
+    return next(
+      new AppError(
+        'User used social login. Please choose one of the social login method you used before.',
+        400
+      )
+    );
   }
 
   resWithToken(user, 200, res);
@@ -213,7 +210,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const path = req.route === undefined ? '' : req.route.path;
   if (!currentUser.isCompleted && path !== '/signup/complete') {
     // Later this should redirect to form, now just error
-    return next(new AppError('Complete user profile!', 401));
+    return next(new AppError('Not completed', 401));
   }
 
   // Check if user changed password after the token was issued

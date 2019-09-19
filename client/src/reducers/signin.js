@@ -1,30 +1,31 @@
-import { USER_LOADED, AUTH_ERROR, LOGOUT } from '../actions/types';
+import {
+  LOGIN_LOADING_TRUE,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+} from '../actions/types';
 
 const initialState = {
-  token: localStorage.getItem('token'),
-  isAuth: false,
-  loading: true,
-  user: null,
+  loading: false,
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
-
   switch (type) {
-    case USER_LOADED:
+    case LOGIN_LOADING_TRUE:
       return {
         ...state,
-        isAuth: true,
-        loading: false,
-        user: payload,
+        loading: true,
       };
-    case AUTH_ERROR:
-    case LOGOUT:
+    case LOGIN_SUCCESS:
+      localStorage.setItem('token', payload.token);
+      return {
+        ...state,
+        loading: false,
+      };
+    case LOGIN_FAIL:
       localStorage.removeItem('token');
       return {
         ...state,
-        token: null,
-        isAuth: false,
         loading: false,
       };
     default:

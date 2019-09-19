@@ -31,13 +31,17 @@ exports.search = catchAsync(async (req, res, next) => {
       $text: { $search: q },
       $or: [
         {
-          $and: [{ privacy: 'public' }, { state: 'publish' }]
-        },
-        {
           author: req.user.id
         },
         {
-          $and: [{ privacy: 'friends' }, { author: userFriends }]
+          $and: [{ privacy: 'public' }, { state: 'publish' }]
+        },
+        {
+          $and: [
+            { privacy: 'friends' },
+            { state: 'publish' },
+            { author: userFriends }
+          ]
         }
       ]
     },
@@ -109,12 +113,9 @@ exports.createPost = catchAsync(async (req, res, next) => {
     await Promise.all(
       req.body.photos.map(async (photo, i) => {
         const fileName = `post-${newPost.id}-${Date.now()}-${i + 1}.jpeg`;
-        fs.move(
+        await fs.move(
           `public/images/posts/${req.user.id}/${photo}`,
-          `public/images/posts/${newPost.id}/${fileName}`,
-          err => {
-            if (err) return next(new AppError('Move files error!', 404));
-          }
+          `public/images/posts/${newPost.id}/${fileName}`
         );
         newPhotos.push(fileName);
       })
@@ -201,16 +202,17 @@ exports.getAllPostsForUser = catchAsync(async (req, res, next) => {
     Post.find({
       $or: [
         {
-          $and: [{ privacy: 'public' }, { state: 'publish' }]
-        },
-        {
           author: user.id
         },
         {
-          $and: [{ state: 'draft' }, { author: user.id }]
+          $and: [{ privacy: 'public' }, { state: 'publish' }]
         },
         {
-          $and: [{ privacy: 'friends' }, { author: userFriends }]
+          $and: [
+            { privacy: 'friends' },
+            { state: 'publish' },
+            { author: userFriends }
+          ]
         }
       ]
     }).sort({ updatedAt: -1 }),
@@ -245,6 +247,9 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
+    fs.remove(`public/images/posts/${req.user.id}`, err => {
+      if (err) return next(new AppError('Directory not found.', 404));
+    });
     return next(new AppError('No post found to update', 404));
   }
 

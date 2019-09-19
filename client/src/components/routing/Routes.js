@@ -18,7 +18,7 @@ const Routes = () => {
     <>
       <Content
         style={{
-          minHeight: md ? 'calc(100vh - 153px)' : 'calc(100vh - 138px)',
+          minHeight: md ? 'calc(100vh - 158px)' : 'calc(100vh - 138px)',
           padding: md ? '0 50px' : '0 10px',
           marginTop: md ? 89 : 74,
         }}

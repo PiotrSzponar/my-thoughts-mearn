@@ -1,11 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import { Row, Col, Typography, Icon, Button } from 'antd';
 import styles from './Landing.module.scss';
 
 const { Title } = Typography;
 
-const Landing = () => {
+const Landing = ({ isAuth }) => {
+  if (isAuth) {
+    return <Redirect to="/feed" />;
+  }
+
   return (
     <Row className={styles.bg} type="flex" justify="center" align="middle">
       <div className={styles.leadText}>
@@ -36,4 +42,12 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+Landing.propTypes = {
+  isAuth: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isAuth: state.auth.isAuth,
+});
+
+export default connect(mapStateToProps)(Landing);

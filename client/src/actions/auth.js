@@ -1,39 +1,28 @@
 import axios from 'axios';
-import { REGISTER_SUCCESS, REGISTER_FAIL } from './types';
-import { setAlert } from './alert';
+import { USER_LOADED, AUTH_ERROR, LOGOUT } from './types';
+import setAuthToken from '../utils/setAuthToken';
 
-// Register User
-export const signup = ({
-  name,
-  email,
-  password,
-  passwordConfirm,
-}) => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  const body = JSON.stringify({ name, email, password, passwordConfirm });
+// Load User
+export const loadUser = () => async dispatch => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
 
   try {
-    const res = await axios.post('/api/users/signup', body, config);
+    const res = await axios.get('/api/users/auth');
 
     dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data,
+      type: USER_LOADED,
+      payload: res.data.data.user,
     });
   } catch (err) {
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    const errors = err.response.data.message.split('\n');
-    errors.forEach(error => dispatch(setAlert(error, 'fail')));
-
     dispatch({
-      type: REGISTER_FAIL,
+      type: AUTH_ERROR,
     });
   }
+};
+
+// Logout / Clear Profile
+export const logout = () => dispatch => {
+  dispatch({ type: LOGOUT });
 };

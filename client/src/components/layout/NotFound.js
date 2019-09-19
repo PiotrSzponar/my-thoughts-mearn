@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Result, Button } from 'antd';
+import { Button, Card } from 'antd';
+import ResultMsg from './ResultMsg';
 
-const NotFound = () => {
-  return (
-    <Result
-      style={{ padding: '0 0 30px 0' }}
+const NotFound = () => (
+  <Card style={{ maxWidth: 600, margin: '0 auto' }}>
+    <ResultMsg
       status="404"
       title="404 - Page Not Found!"
       subTitle="Sorry, the page you visited does not exist."
@@ -15,7 +15,7 @@ const NotFound = () => {
         </Link>
       }
     />
-  );
-};
+  </Card>
+);
 
 export default NotFound;
