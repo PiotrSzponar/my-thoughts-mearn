@@ -8,7 +8,7 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
 import Routes from './components/routing/Routes';
-import Navbar from './components/layout/Navbar';
+import Navbar from './components/layout/Navbar/Navbar';
 import Landing from './components/Landing/Landing';
 
 import './App.css';

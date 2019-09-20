@@ -1,12 +1,21 @@
 .bg {
-  // height: calc(100vh - 64px) !important;
-  height: 100vh !important;
-  background: url('../../img/landing.jpg') no-repeat center center/cover;
+  height: 100% !important;
+  min-height: 100vh;
+  background: url('../../img/landing.jpg') no-repeat center center/cover
+    rgba(0, 0, 0, 0.7);
+  position: fixed;
 }
 
 .leadText {
-  margin-top: 64px;
+  max-width: 576px;
+  height: 100%;
+  min-height: calc(100vh - 64px);
+  margin: 64px auto 0;
+  padding: 25px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   & > * {
     color: #fff !important;
@@ -15,4 +24,16 @@
 
 .buttons {
   margin-top: 30px;
+}
+
+.spinWrapper {
+  position: relative;
+  height: 100vh;
+}
+
+.spin {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
 }
