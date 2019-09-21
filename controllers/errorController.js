@@ -24,10 +24,10 @@ const handleValidationError = err => {
 };
 
 const handleJWTError = () =>
-  new AppError('Invalid token. Please log in again!', 401);
+  new AppError('Invalid access. Please try again!', 401);
 
 const handleJWTExpiredError = () =>
-  new AppError('Your token has expired! Please log in again.', 401);
+  new AppError('Your access has expired! Please try again.', 401);
 
 const handleMulterCountFiles = () =>
   new AppError('You want to upload too many files.', 401);

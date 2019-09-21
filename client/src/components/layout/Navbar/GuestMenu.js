@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Menu, Icon, Divider } from 'antd';
+import { hideDrawer } from '../../../actions/layout';
 
-const GuestMenu = ({ mode, theme }) => {
+const GuestMenu = ({ mode, theme, hideDrawer }) => {
   return (
     <>
       <Menu
@@ -11,6 +13,7 @@ const GuestMenu = ({ mode, theme }) => {
         theme={theme}
         style={{ lineHeight: '64px', marginRight: 'auto' }}
         selectable={false}
+        onClick={hideDrawer}
       >
         <Menu.Item key="hot">
           <Link to="/hot">
@@ -25,6 +28,7 @@ const GuestMenu = ({ mode, theme }) => {
         theme={theme}
         style={{ lineHeight: '64px' }}
         selectable={false}
+        onClick={hideDrawer}
       >
         <Menu.Item key="signin">
           <Link to="/signin">
@@ -46,6 +50,10 @@ const GuestMenu = ({ mode, theme }) => {
 GuestMenu.propTypes = {
   mode: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
+  hideDrawer: PropTypes.func.isRequired,
 };
 
-export default GuestMenu;
+export default connect(
+  null,
+  { hideDrawer },
+)(GuestMenu);

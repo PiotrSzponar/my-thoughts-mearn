@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
 import {
   Row,
   Col,
@@ -14,19 +15,94 @@ import {
   Typography,
   Spin,
 } from 'antd';
-import { signin } from '../../../actions/signin';
+import { setAlert } from '../../../actions/alert';
+import { loadUser } from '../../../actions/auth';
 import Social from '../Social/Social';
 
 const { Title, Text } = Typography;
 
-const SigninForm = ({ form, signin, isAuth, loading }) => {
+const SigninForm = ({
+  form,
+  isAuth,
+  authLoading,
+  match,
+  setAlert,
+  loadUser,
+}) => {
   const { getFieldDecorator } = form;
+  const [signinLoading, setSigninLoading] = useState(false);
+
+  const sendSignin = async ({ email, password }) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ email, password });
+
+    setSigninLoading(true);
+
+    try {
+      const res = await axios.post('/api/users/signin', body, config);
+
+      localStorage.setItem('token', res.data.token);
+      setSigninLoading(false);
+      loadUser();
+    } catch (err) {
+      const errors = err.response.data.message.split('\n');
+      errors.forEach(error => {
+        if (error !== 'Not verified') {
+          setAlert(error, 'fail');
+        } else {
+          setAlert(error, 'fail', 15000);
+        }
+      });
+
+      localStorage.removeItem('token');
+      setSigninLoading(false);
+    }
+  };
+
+  const sendVerification = useCallback(
+    async token => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      setSigninLoading(true);
+
+      try {
+        const res = await axios.patch(
+          `/api/users/verification/${token}`,
+          config,
+        );
+
+        setSigninLoading(false);
+        setAlert(res.data.message, 'success', 5000);
+      } catch (err) {
+        const errors = err.response.data.message.split('\n');
+        errors.forEach(error => {
+          setAlert(error, 'fail', 10000);
+        });
+        setSigninLoading(false);
+      }
+    },
+    [setAlert],
+  );
+
+  useEffect(() => {
+    if (match.path.includes('verification')) {
+      sendVerification(match.params.token);
+    }
+  }, [match, sendVerification]);
 
   const handleSubmit = e => {
     e.preventDefault();
     form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        signin(values);
+        sendSignin(values);
       }
     });
   };
@@ -36,7 +112,7 @@ const SigninForm = ({ form, signin, isAuth, loading }) => {
   }
 
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={signinLoading || authLoading}>
       <Row>
         <Col xs={{ span: 24 }} md={{ span: 16, offset: 4 }}>
           <Card>
@@ -86,9 +162,12 @@ const SigninForm = ({ form, signin, isAuth, loading }) => {
                 <Button type="primary" block htmlType="submit">
                   Login
                 </Button>
+                <Link to="/forgot-password" style={{ float: 'right' }}>
+                  Forgot password
+                </Link>
               </Form.Item>
             </Form>
-            <Divider>OR</Divider>
+            <Divider>or get access with:</Divider>
             <Social />
           </Card>
         </Col>
@@ -99,19 +178,21 @@ const SigninForm = ({ form, signin, isAuth, loading }) => {
 
 SigninForm.propTypes = {
   form: PropTypes.objectOf(PropTypes.func).isRequired,
-  signin: PropTypes.func.isRequired,
   isAuth: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
+  authLoading: PropTypes.bool.isRequired,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
+  setAlert: PropTypes.func.isRequired,
+  loadUser: PropTypes.func.isRequired,
 };
 
 const Signin = Form.create({ name: 'signin' })(SigninForm);
 
 const mapStateToProps = state => ({
   isAuth: state.auth.isAuth,
-  loading: state.signin.loading,
+  authLoading: state.auth.loading,
 });
 
 export default connect(
   mapStateToProps,
-  { signin },
+  { setAlert, loadUser },
 )(Signin);

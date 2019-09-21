@@ -79,9 +79,11 @@ exports.signup = catchAsync(async (req, res, next) => {
     process.env.JWT_VERIFICATION_EXPIRES_IN
   );
 
-  const verificationURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/users/verification/${verificationToken}`;
+  // const verificationURL = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/verification/${verificationToken}`;
+
+  const verificationURL = `${process.env.URL}/verification/${verificationToken}`;
 
   await new Email(newUser, verificationURL).sendVerification();
 
@@ -100,7 +102,7 @@ exports.verification = catchAsync(async (req, res, next) => {
 
   // If token has not expired, and there is user, confirm verification
   if (!user) {
-    return next(new AppError('Token is invalid or has expired', 400));
+    return next(new AppError('Access is invalid or has expired', 400));
   }
   if (user.isVerified) {
     return next(new AppError('This user has already been verified', 400));
@@ -115,7 +117,7 @@ exports.verification = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    message: 'User confirmed'
+    message: 'User confirmed! Now you can sign in to your account.'
   });
 });
 
@@ -140,9 +142,11 @@ exports.resendVerification = catchAsync(async (req, res, next) => {
     process.env.JWT_VERIFICATION_EXPIRES_IN
   );
 
-  const verificationURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/users/verification/${verificationToken}`;
+  // const verificationURL = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/verification/${verificationToken}`;
+
+  const verificationURL = `${process.env.URL}/verification/${verificationToken}`;
 
   await new Email(user, verificationURL).sendVerification();
 
@@ -206,13 +210,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError('The user does no exist.', 401));
   }
 
-  // Allow uncompleted user to enter only social-complete form
-  const path = req.route === undefined ? '' : req.route.path;
-  if (!currentUser.isCompleted && path !== '/signup/complete') {
-    // Later this should redirect to form, now just error
-    return next(new AppError('Not completed', 401));
-  }
-
   // Check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
@@ -242,9 +239,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     // Generate token
     const resetToken = signToken(user._id, process.env.JWT_RESET_EXPIRES_IN);
 
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/users/reset-password/${resetToken}`;
+    // const resetURL = `${req.protocol}://${req.get(
+    //   'host'
+    // )}/api/users/reset-password/${resetToken}`;
+
+    const resetURL = `${process.env.URL}/reset-password/${resetToken}`;
 
     // Send it to the user's email
     await new Email(user, resetURL).sendResetPassword();
@@ -264,7 +263,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // If token has not expired, and there is user, change the password
   if (!user) {
-    return next(new AppError('Token is invalid or has expired', 400));
+    return next(new AppError('Access is invalid or has expired', 400));
   }
   // Check if user used local login method
   if (user.method !== 'local') {

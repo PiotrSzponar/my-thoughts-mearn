@@ -4,6 +4,8 @@ import { useMediaQuery } from 'react-responsive';
 import { Layout, BackTop, Icon } from 'antd';
 import Signup from '../auth/Signup/Signup';
 import Signin from '../auth/Signin/Signin';
+import ForgotPass from '../auth/ForgotPass/ForgotPass';
+import ResendVerification from '../auth/ResendVerification/ResendVerification';
 import NotFound from '../layout/NotFound';
 import Alert from '../layout/Alert/AlertMsg';
 
@@ -27,6 +29,14 @@ const Routes = () => {
         <Switch>
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/signin" component={Signin} />
+          <Route exact path="/verification/:token" component={Signin} />
+          <Route
+            exact
+            path="/resend-verification"
+            component={ResendVerification}
+          />
+          <Route exact path="/forgot-password" component={ForgotPass} />
+          <Route exact path="/reset-password/:token" component={ForgotPass} />
           <Route component={NotFound} />
         </Switch>
       </Content>

@@ -1,9 +1,14 @@
-import { USER_LOADED, AUTH_ERROR, LOGOUT } from '../actions/types';
+import {
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGOUT,
+  AUTH_LOADING_TRUE,
+} from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuth: false,
-  loading: true,
+  loading: false,
   user: null,
 };
 
@@ -11,6 +16,11 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case AUTH_LOADING_TRUE:
+      return {
+        ...state,
+        loading: true,
+      };
     case USER_LOADED:
       return {
         ...state,

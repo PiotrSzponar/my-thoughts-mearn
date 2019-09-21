@@ -15,7 +15,10 @@ const AlertMsg = ({ alerts }) =>
           message={
             alert.msg === 'Not verified' ? (
               <>
-                <p><strong>User hasn&apos;t confirm email address.</strong> Please check your inbox and click the confirmation link.</p>
+                <p>
+                  <strong>User hasn&apos;t confirm email address.</strong>{' '}
+                  Please check your inbox and click the confirmation link.
+                </p>
                 <span>You can also &nbsp;</span>
                 <Link to="/resend-verification">
                   <Button size="small">

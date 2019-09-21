@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Menu, Icon, Divider, Avatar } from 'antd';
 import { logout } from '../../../actions/auth';
+import { hideDrawer } from '../../../actions/layout';
 
 const { SubMenu } = Menu;
 
-const AuthMenu = ({ mode, theme, logout }) => {
+const AuthMenu = ({ mode, theme, logout, hideDrawer }) => {
   return (
     <>
       <Menu
@@ -15,6 +16,7 @@ const AuthMenu = ({ mode, theme, logout }) => {
         theme={theme}
         style={{ lineHeight: '64px', marginRight: 'auto' }}
         selectable={false}
+        onClick={hideDrawer}
       >
         <Menu.Item key="hot">
           <Link to="/hot">
@@ -35,6 +37,7 @@ const AuthMenu = ({ mode, theme, logout }) => {
         theme={theme}
         style={{ lineHeight: '64px' }}
         selectable={false}
+        onClick={hideDrawer}
       >
         <SubMenu
           title={
@@ -63,9 +66,10 @@ const AuthMenu = ({ mode, theme, logout }) => {
 AuthMenu.propTypes = {
   mode: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
+  hideDrawer: PropTypes.func.isRequired,
 };
 
 export default connect(
   null,
-  { logout },
+  { logout, hideDrawer },
 )(AuthMenu);

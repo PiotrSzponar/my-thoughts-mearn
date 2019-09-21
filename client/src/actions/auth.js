@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { USER_LOADED, AUTH_ERROR, LOGOUT } from './types';
+import { USER_LOADED, AUTH_ERROR, LOGOUT, AUTH_LOADING_TRUE } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
 // Load User
@@ -7,6 +7,10 @@ export const loadUser = () => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
+
+  dispatch({
+    type: AUTH_LOADING_TRUE,
+  });
 
   try {
     const res = await axios.get('/api/users/auth');

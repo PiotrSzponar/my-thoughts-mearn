@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
 import alert from './alert';
-import signup from './signup';
-import signin from './signin';
 import auth from './auth';
+import layout from './layout';
 
 export default combineReducers({
+  layout,
   alert,
-  signup,
-  signin,
   auth,
 });

@@ -1,22 +1,47 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { animateScroll as scroll } from 'react-scroll';
 import { Divider, Form, Input, Icon, Button, Typography } from 'antd';
-import { signup } from '../../../actions/signup';
+import { setAlert } from '../../../actions/alert';
 import Social from '../Social/Social';
 
 const { Title, Text } = Typography;
 
-const Signup = ({ form, signup }) => {
+const Signup = ({ form, isCreated, isLoading, setAlert }) => {
   const [confirmDirty, setConfirmDirty] = useState(false);
+
+  const sendSignup = async ({ name, email, password, passwordConfirm }) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ name, email, password, passwordConfirm });
+
+    isLoading(true);
+
+    try {
+      await axios.post('/api/users/signup', body, config);
+
+      isCreated(true);
+      isLoading(false);
+    } catch (err) {
+      const errors = err.response.data.message.split('\n');
+      errors.forEach(error => setAlert(error, 'fail'));
+
+      isCreated(false);
+      isLoading(false);
+    }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
+    form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        signup(values);
+        sendSignup(values);
       }
     });
   };
@@ -129,7 +154,7 @@ const Signup = ({ form, signup }) => {
           </Button>
         </Form.Item>
       </Form>
-      <Divider>OR</Divider>
+      <Divider>or get access with:</Divider>
       <Social />
     </>
   );
@@ -137,12 +162,14 @@ const Signup = ({ form, signup }) => {
 
 Signup.propTypes = {
   form: PropTypes.objectOf(PropTypes.func).isRequired,
-  signup: PropTypes.func.isRequired,
+  isLoading: PropTypes.func.isRequired,
+  isCreated: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 const SignupForm = Form.create({ name: 'signup' })(Signup);
 
 export default connect(
   null,
-  { signup },
+  { setAlert },
 )(SignupForm);
