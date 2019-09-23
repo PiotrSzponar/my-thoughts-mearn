@@ -8,7 +8,13 @@ import { hideDrawer } from '../../../actions/layout';
 
 const { SubMenu } = Menu;
 
-const AuthMenu = ({ mode, theme, logout, hideDrawer }) => {
+const AuthMenu = ({
+  mode,
+  theme,
+  logout,
+  hideDrawer,
+  user: { name, photo, _id },
+}) => {
   return (
     <>
       <Menu
@@ -42,16 +48,16 @@ const AuthMenu = ({ mode, theme, logout, hideDrawer }) => {
         <SubMenu
           title={
             <span style={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar size="small" icon="user" />
-              &nbsp; Piotr Szponar
+              <Avatar size="small" src={`/images/users/${photo}`} />
+              &nbsp; {name}
             </span>
           }
         >
           <Menu.Item key="profile">
-            <Link to="/profile">My profile</Link>
+            <Link to={`/user/${_id}`}>My profile</Link>
           </Menu.Item>
           <Menu.Item key="posts">
-            <Link to="/posts">My posts</Link>
+            <Link to={`/posts/${_id}`}>My posts</Link>
           </Menu.Item>
           <Menu.Item key="logout" onClick={logout}>
             <Icon type="logout" />
@@ -63,10 +69,20 @@ const AuthMenu = ({ mode, theme, logout, hideDrawer }) => {
   );
 };
 
+AuthMenu.defaultProps = {
+  photo: '',
+  name: '',
+  _id: '',
+};
+
 AuthMenu.propTypes = {
   mode: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
   hideDrawer: PropTypes.func.isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  photo: PropTypes.string,
+  name: PropTypes.string,
+  _id: PropTypes.string,
 };
 
 export default connect(

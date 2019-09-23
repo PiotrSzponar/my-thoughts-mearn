@@ -91,12 +91,24 @@ router
     userController.updateUser
   )
   .delete(userController.deleteUser);
+
 // Separate path to change password
 router.patch(
   '/me/change-password',
   authController.updatePasswordValidator,
   authController.updatePassword
 );
+
+// Upload user photo
+router.patch(
+  '/me/upload-photo',
+  fileController.uploadUserPhoto,
+  fileController.resizeUserPhoto,
+  userController.uploadUserPhoto
+);
+
+// Remove user photo
+router.delete('/me/delete-photo', userController.deleteUserPhoto);
 
 // Show provided user
 router.get('/:id', userController.getUser);

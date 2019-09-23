@@ -1,0 +1,15 @@
+.photoUploader {
+  display: flex !important;
+  justify-content: center;
+
+  & > div {
+    width: 128px !important;
+    height: 128px !important;
+  }
+
+  & img {
+    width: 100%;
+    object-fit: cover;
+    height: 110px;
+  }
+}

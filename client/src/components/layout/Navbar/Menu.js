@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import AuthMenu from './AuthMenu';
 import GuestMenu from './GuestMenu';
 
-const Menu = ({ auth: { isAuth, loading }, mode, theme }) => {
+const Menu = ({ auth: { isAuth, loading, user }, mode, theme }) => {
   if (!loading) {
     return isAuth ? (
-      <AuthMenu mode={mode} theme={theme} />
+      <AuthMenu mode={mode} theme={theme} user={user} />
     ) : (
       <GuestMenu mode={mode} theme={theme} />
     );
   }
-  return '&nbsp;';
+  return <>&nbsp;</>;
 };
 
 Menu.propTypes = {

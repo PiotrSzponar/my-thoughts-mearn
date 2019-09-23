@@ -19,7 +19,7 @@ const filterObj = (obj, ...allowedFields) => {
 // Authenticate user
 exports.authUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id).select(
-    'name photo isVerified isCompleted'
+    'name photo isCompleted'
   );
 
   res.status(200).json({
@@ -205,6 +205,54 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// Upload user photo
+exports.uploadUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.user) {
+    return next(new AppError('Login first!', 403));
+  }
+
+  const user = await User.findById(req.user.id);
+
+  // Add user photo
+  if (req.file) {
+    user.photo = req.file.filename;
+    await user.save();
+  } else {
+    return next(new AppError('No file found to upload!', 400));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    message: 'User photo uploaded',
+    data: {
+      photo: user.photo
+    }
+  });
+});
+
+// Remove user photo
+exports.deleteUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.user) {
+    return next(new AppError('Login first!', 403));
+  }
+
+  const user = await User.findById(req.user.id);
+
+  fs.remove(`public/images/users/${user.photo}`, err => {
+    if (err) return next(new AppError('Photo not found', 404));
+  });
+  user.photo = 'default.jpg';
+  await user.save();
+
+  res.status(200).json({
+    status: 'success',
+    message: 'User photo deleted',
+    data: {
+      photo: user.photo
+    }
+  });
+});
+
 // Complete user profile after signup
 // Every user (no matter what login method was used) ends with the same filled profile
 exports.completeProfile = catchAsync(async (req, res, next) => {
@@ -241,8 +289,7 @@ exports.completeProfile = catchAsync(async (req, res, next) => {
     'bio',
     'country',
     'city',
-    'isHidden',
-    'deletePhoto'
+    'isHidden'
   );
   if (req.body.name) filteredBody.name = req.body.name;
 
@@ -254,21 +301,6 @@ exports.completeProfile = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true
   });
-
-  // Add user photo
-  if (req.file) {
-    user.photo = req.file.filename;
-    await user.save();
-  }
-
-  // Delete photo
-  if (req.body.deletePhoto && req.body.deletePhoto === 'true') {
-    fs.remove(`public/images/users/${user.photo}`, err => {
-      if (err) return next(new AppError('Photo not found', 404));
-    });
-    user.photo = 'default.jpg';
-    await user.save();
-  }
 
   res.status(201).json({
     status: 'success',

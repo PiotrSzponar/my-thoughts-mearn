@@ -2,12 +2,15 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { Layout, BackTop, Icon } from 'antd';
+import NotFound from '../layout/NotFound';
+import Alert from '../layout/Alert/AlertMsg';
+import PrivateRoute from './PrivateRoute';
 import Signup from '../auth/Signup/Signup';
 import Signin from '../auth/Signin/Signin';
 import ForgotPass from '../auth/ForgotPass/ForgotPass';
 import ResendVerification from '../auth/ResendVerification/ResendVerification';
-import NotFound from '../layout/NotFound';
-import Alert from '../layout/Alert/AlertMsg';
+import Feed from '../Feed/Feed';
+import Complete from '../users/Complete';
 
 const { Content, Footer } = Layout;
 
@@ -37,6 +40,8 @@ const Routes = () => {
           />
           <Route exact path="/forgot-password" component={ForgotPass} />
           <Route exact path="/reset-password/:token" component={ForgotPass} />
+          <PrivateRoute exact path="/user/complete" component={Complete} />
+          <PrivateRoute exact path="/feed" component={Feed} />
           <Route component={NotFound} />
         </Switch>
       </Content>

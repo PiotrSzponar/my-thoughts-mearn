@@ -15,18 +15,9 @@ const signToken = (id, expiresTime = process.env.JWT_LOGIN_EXPIRES_IN) => {
 const resWithToken = (user, statusCode, res) => {
   const token = signToken(user._id);
 
-  // Remove sensitive fields from output
-  user.password = undefined;
-  user.isVerified = undefined;
-  user.isActive = undefined;
-  user.isCompleted = undefined;
-
   res.status(statusCode).json({
     status: 'success',
-    token,
-    data: {
-      user
-    }
+    token
   });
 };
 exports.resWithToken = resWithToken;
