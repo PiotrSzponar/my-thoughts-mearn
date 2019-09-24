@@ -39,7 +39,9 @@ exports.socialSignin = catchAsync(async (req, res, next) => {
   if (!req.user) {
     return next(new AppError('Use social login!', 403));
   }
-  resWithToken(req.user, 200, res);
+  const token = signToken(req.user._id);
+  res.redirect(`${process.env.URL}/signin/social/${token}`);
+  // resWithToken(req.user, 200, res);
 });
 
 // User registration with email address verification

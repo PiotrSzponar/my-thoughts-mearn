@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { Layout, BackTop, Icon } from 'antd';
+import Navbar from '../layout/Navbar/Navbar';
 import NotFound from '../layout/NotFound';
 import Alert from '../layout/Alert/AlertMsg';
 import PrivateRoute from './PrivateRoute';
@@ -21,6 +22,7 @@ const Routes = () => {
 
   return (
     <>
+      <Navbar />
       <Content
         style={{
           minHeight: md ? 'calc(100vh - 158px)' : 'calc(100vh - 138px)',

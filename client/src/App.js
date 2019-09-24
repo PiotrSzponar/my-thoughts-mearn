@@ -8,8 +8,8 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
 import Routes from './components/routing/Routes';
-import Navbar from './components/layout/Navbar/Navbar';
 import Landing from './components/Landing/Landing';
+import CloseSocial from './components/auth/Social/CloseSocial';
 
 import './App.css';
 
@@ -26,9 +26,9 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Layout>
-          <Navbar />
           <Switch>
             <Route exact path="/" component={Landing} />
+            <Route exact path="/signin/social/:token" component={CloseSocial} />
             <Route component={Routes} />
           </Switch>
         </Layout>

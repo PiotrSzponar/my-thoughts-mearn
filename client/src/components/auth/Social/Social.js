@@ -1,47 +1,56 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import NewWindow from 'react-new-window';
 import { Row, Col, Icon, Button } from 'antd';
+import { loadUser } from '../../../actions/auth';
 
-const width = 600;
-const height = 600;
-const left = window.innerWidth / 2 - width / 2;
-const top = window.innerHeight / 2 - height / 2;
+const Social = ({ loadUser }) => {
+  const [openGoogle, setOpenGoogle] = useState(false);
+  const [openFacebook, setOpenFacebook] = useState(false);
 
-const Social = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
+  const handleGoogleClick = () => {
+    setOpenGoogle(true);
   };
 
-  const newWindowUnloaded = () => {
-    setOpen(false);
+  const handleFacebookClick = () => {
+    setOpenFacebook(true);
+  };
+
+  const handleClose = () => {
+    loadUser();
+    setOpenGoogle(false);
+    setOpenFacebook(false);
   };
 
   return (
     <Row gutter={24}>
       <Col xs={24} md={{ span: 9, offset: 2 }}>
-        <Link to="/signup">
-          <Button type="primary" block>
-            <Icon type="facebook" />
-            Facebook
-          </Button>
-        </Link>
+        <Button type="primary" block onClick={handleFacebookClick}>
+          <Icon type="facebook" />
+          Facebook
+        </Button>
+        {openFacebook && (
+          <NewWindow
+            url="/api/users/signup/facebook/"
+            center="screen"
+            onUnload={() => handleClose()}
+          />
+        )}
       </Col>
       <Col xs={24} md={2}>
         &nbsp;
       </Col>
       <Col xs={24} md={9}>
-        <Button type="danger" block onClick={handleClick}>
+        <Button type="danger" block onClick={handleGoogleClick}>
           <Icon type="google" />
           Google
         </Button>
-        {open && (
+        {openGoogle && (
           <NewWindow
-            url="http://localhost:3000/api/users/signup/google/"
+            url="/api/users/signup/google/"
             center="screen"
-            onUnload={() => newWindowUnloaded()}
+            onUnload={() => handleClose()}
           />
         )}
       </Col>
@@ -49,4 +58,11 @@ const Social = () => {
   );
 };
 
-export default Social;
+Social.propTypes = {
+  loadUser: PropTypes.func.isRequired,
+};
+
+export default connect(
+  null,
+  { loadUser },
+)(Social);

@@ -215,14 +215,19 @@ exports.getAllPostsForUser = catchAsync(async (req, res, next) => {
           ]
         }
       ]
-    }).sort({ updatedAt: -1 }),
+    })
+      .populate({
+        path: 'author',
+        select: 'name photo'
+      })
+      .sort({ updatedAt: -1 }),
     req.query
   ).paginate();
 
   const posts = await features.query;
 
-  posts.forEach(post => {
-    if (post.author.toString() === user.id) {
+  posts.map(async post => {
+    if (post.author.id.toString() === user.id) {
       post._doc.from = 'myself';
     } else if (
       post.privacy === 'friends' ||

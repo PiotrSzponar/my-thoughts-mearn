@@ -9,8 +9,8 @@
 .leadText {
   max-width: 576px;
   height: 100%;
-  min-height: calc(100vh - 64px);
-  margin: 64px auto 0;
+  min-height: 100vh;
+  margin: 0 auto;
   padding: 25px;
   text-align: center;
   display: flex;
