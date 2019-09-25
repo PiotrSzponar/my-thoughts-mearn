@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import ConfirmForm from './ConfirmForm';
 import ResetPassForm from './ResetPassForm';
+import forgot from '../../../img/forgot.svg';
 
 const { Title } = Typography;
 const { Step } = Steps;
@@ -64,9 +65,17 @@ const ForgotPassForm = ({ isAuth, authLoading, match }) => {
   };
 
   return (
-    <Spin spinning={loading || authLoading}>
-      <Row>
-        <Col xs={{ span: 24 }} md={{ span: 16, offset: 4 }}>
+    <Row gutter={{ md: 48 }} className="flex-row">
+      <Col
+        xl={16}
+        lg={14}
+        md={12}
+        span={24}
+        style={{ backgroundImage: `url(${forgot})` }}
+        className="col-img"
+      />
+      <Col xl={8} lg={10} md={12} span={24}>
+        <Spin spinning={loading || authLoading}>
           <Card>
             <Title level={2}>
               <Icon type="login" /> Reset Password
@@ -101,9 +110,9 @@ const ForgotPassForm = ({ isAuth, authLoading, match }) => {
               />
             )}
           </Card>
-        </Col>
-      </Row>
-    </Spin>
+        </Spin>
+      </Col>
+    </Row>
   );
 };
 

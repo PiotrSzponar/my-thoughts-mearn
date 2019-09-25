@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import { setAlert } from '../../../actions/alert';
 import ResultMsg from '../../layout/ResultMsg';
+import resend from '../../../img/resend.svg';
 
 const { Title, Text } = Typography;
 
@@ -63,9 +64,17 @@ const ResendVerificationForm = ({ form, isAuth, authLoading, setAlert }) => {
   };
 
   return (
-    <Spin spinning={loading || authLoading}>
-      <Row>
-        <Col xs={{ span: 24 }} md={{ span: 16, offset: 4 }}>
+    <Row gutter={{ md: 48 }} className="flex-row">
+      <Col
+        xl={16}
+        lg={14}
+        md={12}
+        span={24}
+        style={{ backgroundImage: `url(${resend})` }}
+        className="col-img"
+      />
+      <Col xl={8} lg={10} md={12} span={24}>
+        <Spin spinning={loading || authLoading}>
           <Card>
             {verificationSend ? (
               <ResultMsg
@@ -122,9 +131,9 @@ const ResendVerificationForm = ({ form, isAuth, authLoading, setAlert }) => {
               </>
             )}
           </Card>
-        </Col>
-      </Row>
-    </Spin>
+        </Spin>
+      </Col>
+    </Row>
   );
 };
 

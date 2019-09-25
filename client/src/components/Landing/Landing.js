@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Row, Col, Typography, Icon, Button, Spin } from 'antd';
+import chat from '../../img/chat.svg';
 import styles from './Landing.module.scss';
 
 const { Title } = Typography;
@@ -23,8 +24,10 @@ const Landing = ({ isAuth, isLoading }) => {
     <Row className={styles.bg}>
       <div className={styles.leadText}>
         <Title>
-          <Icon type="bulb" /> <strong>My</strong>Thoughts
+          <Icon type="bulb" style={{ color: '#1890ff' }} /> <strong>My</strong>
+          Thoughts
         </Title>
+        <img src={chat} alt="thoughts" className={styles.img} />
         <Title level={3}>Connect with friends and the world around you.</Title>
         <Row className={styles.buttons}>
           <Col md={11}>

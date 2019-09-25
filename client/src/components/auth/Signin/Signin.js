@@ -18,6 +18,7 @@ import {
 import { setAlert } from '../../../actions/alert';
 import { loadUser } from '../../../actions/auth';
 import Social from '../Social/Social';
+import signin from '../../../img/signin.svg';
 
 const { Title, Text } = Typography;
 
@@ -112,9 +113,17 @@ const SigninForm = ({
   }
 
   return (
-    <Spin spinning={signinLoading || authLoading}>
-      <Row>
-        <Col xs={{ span: 24 }} md={{ span: 16, offset: 4 }}>
+    <Row gutter={{ md: 48 }} className="flex-row">
+      <Col
+        xl={16}
+        lg={14}
+        md={12}
+        span={24}
+        style={{ backgroundImage: `url(${signin})` }}
+        className="col-img"
+      />
+      <Col xl={8} lg={10} md={12} span={24}>
+        <Spin spinning={signinLoading || authLoading}>
           <Card>
             <Title level={2}>
               <Icon type="login" /> Sign In!
@@ -170,9 +179,9 @@ const SigninForm = ({
             <Divider>or get access with:</Divider>
             <Social />
           </Card>
-        </Col>
-      </Row>
-    </Spin>
+        </Spin>
+      </Col>
+    </Row>
   );
 };
 

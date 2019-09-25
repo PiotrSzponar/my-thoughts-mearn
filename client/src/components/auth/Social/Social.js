@@ -24,8 +24,8 @@ const Social = ({ loadUser }) => {
   };
 
   return (
-    <Row gutter={24}>
-      <Col xs={24} md={{ span: 9, offset: 2 }}>
+    <Row>
+      <Col sm={11} span={24}>
         <Button type="primary" block onClick={handleFacebookClick}>
           <Icon type="facebook" />
           Facebook
@@ -38,10 +38,10 @@ const Social = ({ loadUser }) => {
           />
         )}
       </Col>
-      <Col xs={24} md={2}>
+      <Col sm={2} span={24}>
         &nbsp;
       </Col>
-      <Col xs={24} md={9}>
+      <Col sm={11} span={24}>
         <Button type="danger" block onClick={handleGoogleClick}>
           <Icon type="google" />
           Google

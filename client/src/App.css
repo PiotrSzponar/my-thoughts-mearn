@@ -3,3 +3,18 @@
 .ant-alert-message {
   white-space: pre;
 }
+
+.flex-row {
+  max-width: 1400px;
+  margin: 0 auto !important;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.col-img {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  min-height: 200px;
+  margin: 20px 0 30px;
+}
