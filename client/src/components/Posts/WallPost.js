@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { Card, Icon, Avatar, Typography, Tag } from 'antd';
+import FromIcon from './FromIcon';
 import Photo from './Photo';
 
 const { Text, Title, Paragraph } = Typography;
@@ -20,6 +21,7 @@ const Post = ({ author, post }) => (
     }
     extra={
       <Text type="secondary">
+        <FromIcon from={post.from} /> &nbsp;
         <Moment
           interval={30000}
           fromNow
@@ -38,34 +40,44 @@ const Post = ({ author, post }) => (
       )
     }
     actions={
-      post.from === 'friend'
+      post.from === 'myself'
         ? [
-            <div>
-              <Icon type="like" key="like" /> 1
-            </div>,
+            <Link to={`/post/${post.id}/edit`}>
+              <Icon type="edit" key="edit" /> Edit
+            </Link>,
           ]
         : [
-            <div>
+            <Link to={`/post/${post.id}/like`}>
               <Icon type="like" key="like" /> 1
-            </div>,
-            <div>
-              <Icon type="user-add" key="add-friend" /> Add to friend
-            </div>,
+            </Link>,
           ]
     }
   >
-    <Title level={4}>{post.title}</Title>
+    <Title level={4}>
+      <Link style={{ color: 'inherit' }} to={`/post/${post.id}`}>
+        {post.privacy === 'private' && (
+          <>
+            <Icon type="lock" style={{ color: 'rgba(0, 0, 0, 0.45)' }} /> &nbsp;
+          </>
+        )}
+        {post.title}
+        {post.state === 'draft' && <Text type="secondary"> (draft)</Text>}
+      </Link>
+    </Title>
     <Paragraph ellipsis={{ rows: 5, expandable: true }}>
       {post.content}
     </Paragraph>
     {post.tags.map(tag => (
       <Tag key={`${tag}-${post.id}`}>
-        <Link to={`/tag/${tag}`}>#{tag}</Link>
+        <Link to={`/tag/${tag}`}>{tag}</Link>
       </Tag>
     ))}
   </Card>
 );
 
-Post.propTypes = {};
+Post.propTypes = {
+  author: PropTypes.objectOf(PropTypes.string).isRequired,
+  post: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default Post;

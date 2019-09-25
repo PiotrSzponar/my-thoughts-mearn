@@ -18,3 +18,14 @@
   min-height: 200px;
   margin: 20px 0 30px;
 }
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -24px;
+  width: auto;
+  max-width: 100vw;
+}
+.my-masonry-grid_column {
+  padding-left: 24px;
+  background-clip: padding-box;
+}

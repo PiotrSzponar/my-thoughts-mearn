@@ -1,9 +1,6 @@
 .bg {
   height: 100% !important;
   min-height: 100vh;
-  // background: url('../../img/landing.jpg') no-repeat center center/cover
-  // rgba(0, 0, 0, 0.7);
-  // position: fixed;
 }
 
 .img {
@@ -24,10 +21,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  & > * {
-    // color: #fff !important;
-  }
 }
 
 .buttons {

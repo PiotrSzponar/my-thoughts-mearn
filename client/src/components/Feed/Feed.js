@@ -1,5 +1,6 @@
 import React from 'react';
-import Post from '../Post/Post';
+import Masonry from 'react-masonry-css';
+import Post from '../Posts/WallPost';
 
 const posts = [
   {
@@ -123,28 +124,38 @@ const posts = [
 
 const Feed = () => {
   return (
-    <div style={{ margin: '0 auto', maxWidth: 600 }}>
-      {posts.map(post => (
-        <Post
-          author={{
-            id: post.author._id,
-            name: post.author.name,
-            photo: post.author.photo,
-          }}
-          post={{
-            id: post._id,
-            date: post.updatedAt,
-            title: post.title,
-            photos: post.photos,
-            content: post.content,
-            tags: post.tags,
-            from: post.from,
-            privacy: post.privacy,
-            state: post.state,
-          }}
-          key={post._id}
-        />
-      ))}
+    <div style={{ margin: '0 auto', maxWidth: '1400px' }}>
+      <Masonry
+        breakpointCols={{
+          default: 3,
+          992: 2,
+          576: 1,
+        }}
+        className="my-masonry-grid"
+        columnClassName="my-masonry-grid_column"
+      >
+        {posts.map(post => (
+          <Post
+            author={{
+              id: post.author._id,
+              name: post.author.name,
+              photo: post.author.photo,
+            }}
+            post={{
+              id: post._id,
+              date: post.updatedAt,
+              title: post.title,
+              photos: post.photos,
+              content: post.content,
+              tags: post.tags,
+              from: post.from,
+              privacy: post.privacy,
+              state: post.state,
+            }}
+            key={post._id}
+          />
+        ))}
+      </Masonry>
     </div>
   );
 };
