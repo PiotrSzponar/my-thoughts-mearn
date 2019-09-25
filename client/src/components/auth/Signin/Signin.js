@@ -15,6 +15,7 @@ import {
   Typography,
   Spin,
 } from 'antd';
+import { animateScroll as scroll } from 'react-scroll';
 import { setAlert } from '../../../actions/alert';
 import { loadUser } from '../../../actions/auth';
 import Social from '../Social/Social';
@@ -168,7 +169,12 @@ const SigninForm = ({
                 )}
               </Form.Item>
               <Form.Item style={{ marginBottom: 0 }}>
-                <Button type="primary" block htmlType="submit">
+                <Button
+                  type="primary"
+                  block
+                  htmlType="submit"
+                  onClick={() => scroll.scrollToTop()}
+                >
                   Login
                 </Button>
                 <Link to="/forgot-password" style={{ float: 'right' }}>

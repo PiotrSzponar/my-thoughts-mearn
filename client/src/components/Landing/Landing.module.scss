@@ -26,15 +26,3 @@
 .buttons {
   margin-top: 30px;
 }
-
-.spinWrapper {
-  position: relative;
-  height: 100vh;
-}
-
-.spin {
-  position: absolute !important;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%);
-}

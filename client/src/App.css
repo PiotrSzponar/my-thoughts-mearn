@@ -29,3 +29,15 @@
   padding-left: 24px;
   background-clip: padding-box;
 }
+
+.spinWrapper {
+  position: relative;
+  height: 100vh;
+}
+
+.spin {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+}

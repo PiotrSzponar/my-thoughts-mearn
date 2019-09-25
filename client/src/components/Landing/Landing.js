@@ -11,8 +11,8 @@ const { Title } = Typography;
 const Landing = ({ isAuth, isLoading }) => {
   if (isLoading) {
     return (
-      <div className={styles.spinWrapper}>
-        <Spin tip="Loading..." size="large" className={styles.spin} />
+      <div className="spinWrapper">
+        <Spin tip="Loading..." size="large" className="spin" />
       </div>
     );
   }
