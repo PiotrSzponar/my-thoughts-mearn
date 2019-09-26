@@ -19,8 +19,10 @@ import {
   Typography,
   Spin,
 } from 'antd';
+import Paragraph from 'antd/lib/typography/Paragraph';
 import { setAlert } from '../../actions/alert';
 import { loadUser } from '../../actions/auth';
+import complete from '../../img/complete.svg';
 import styles from './Complete.module.scss';
 
 const { Title, Text } = Typography;
@@ -130,9 +132,16 @@ const CompleteForm = ({ form, setAlert, loadUser, user }) => {
   };
 
   return (
-    <Spin spinning={loading}>
-      <Row>
-        <Col xs={{ span: 24 }} md={{ span: 16, offset: 4 }}>
+    <Row gutter={{ md: 48 }} className="flex-row">
+      <Col
+        xl={14}
+        lg={11}
+        span={24}
+        style={{ backgroundImage: `url(${complete})` }}
+        className="col-img"
+      />
+      <Col xl={10} lg={13} span={24}>
+        <Spin spinning={loading}>
           <Card>
             <Title level={2}>
               <Icon type="edit" /> Complete Profile
@@ -267,12 +276,11 @@ const CompleteForm = ({ form, setAlert, loadUser, user }) => {
               </Row>
               <Form.Item>
                 <Row gutter={16}>
-                  <Col span={24} sm={16}>
+                  <Col span={24} sm={14}>
                     <Title level={4}>Upload your photo</Title>
-                    <Text type="secondary">
+                    <Paragraph type="secondary" style={{ lineHeight: '1.5' }}>
                       Please select up to 3MB photo only.
-                    </Text>
-                    <br />
+                    </Paragraph>
                     <Button
                       onClick={deletePhoto}
                       type="danger"
@@ -282,7 +290,7 @@ const CompleteForm = ({ form, setAlert, loadUser, user }) => {
                       <Icon type="delete" /> Remove photo
                     </Button>
                   </Col>
-                  <Col span={24} sm={8} style={{ textAlign: 'center' }}>
+                  <Col span={24} sm={10} style={{ textAlign: 'center' }}>
                     <Upload
                       name="photo"
                       accept="image/*"
@@ -316,9 +324,9 @@ const CompleteForm = ({ form, setAlert, loadUser, user }) => {
               </Form.Item>
             </Form>
           </Card>
-        </Col>
-      </Row>
-    </Spin>
+        </Spin>
+      </Col>
+    </Row>
   );
 };
 

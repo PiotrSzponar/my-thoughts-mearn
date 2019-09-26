@@ -49,7 +49,7 @@ exports.search = catchAsync(async (req, res, next) => {
       score: { $meta: 'textScore' }
     }
   )
-    .sort({ score: { $meta: 'textScore' }, updatedAt: -1 })
+    .sort({ score: { $meta: 'textScore' }, createdAt: -1 })
     .limit(50);
 
   if (!posts.length) {
@@ -174,12 +174,26 @@ exports.getPost = catchAsync(async (req, res, next) => {
     (req.user.role !== 'admin' &&
       (post.privacy === 'private' || post.state === 'draft') &&
       post.author.id.toString() !== req.user.id) ||
-    (req.user.role !== 'admin' && post.privacy === 'friends' && !friend)
+    (req.user.role !== 'admin' &&
+      post.privacy === 'friends' &&
+      !friend &&
+      post.author.id.toString() !== req.user.id)
   ) {
     return next(new AppError('Post not found', 404));
   }
 
   post.author.friends = undefined;
+
+  if (post.author.id.toString() === req.user.id) {
+    post._doc.from = 'myself';
+  } else if (
+    post.privacy === 'friends' ||
+    (post.privacy === 'public' && friend)
+  ) {
+    post._doc.from = 'friend';
+  } else {
+    post._doc.from = 'stranger';
+  }
 
   res.status(200).json({
     status: 'success',
@@ -195,6 +209,13 @@ exports.getAllPostsForUser = catchAsync(async (req, res, next) => {
     path: 'friends',
     select: 'recipient'
   });
+
+  let sort = {};
+  if (req.query.sort.toString() === 'likes') {
+    sort = { likes: -1, createdAt: -1 };
+  } else {
+    sort = { createdAt: -1 };
+  }
 
   const userFriends = user.friends.map(obj => obj.recipient);
 
@@ -220,7 +241,7 @@ exports.getAllPostsForUser = catchAsync(async (req, res, next) => {
         path: 'author',
         select: 'name photo'
       })
-      .sort({ updatedAt: -1 }),
+      .sort(sort),
     req.query
   ).paginate();
 
@@ -417,6 +438,26 @@ exports.draftPost = catchAsync(async (req, res, next) => {
     status: 'success',
     message: 'Post has been drafted!',
     data: post
+  });
+});
+
+exports.likePost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+  const userIndex = post.likes.indexOf(req.user.id);
+  if (userIndex === -1) {
+    post.likes.unshift(req.user.id);
+  } else {
+    post.likes.splice(userIndex, 1);
+  }
+
+  await post.save();
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      post: req.params.id,
+      likes: post.likes
+    }
   });
 });
 

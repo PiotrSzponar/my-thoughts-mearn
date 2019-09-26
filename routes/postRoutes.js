@@ -40,4 +40,7 @@ router
 router.patch('/:id/publish', postController.publishPost);
 router.patch('/:id/draft', postController.draftPost);
 
+// Like post
+router.patch('/:id/like', postController.likePost);
+
 module.exports = router;

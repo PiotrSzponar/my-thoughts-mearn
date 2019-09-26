@@ -8,6 +8,7 @@ const postSchema = new Schema(
     },
     content: {
       type: String,
+      maxlength: [3000, 'Post content can have up to 3000 characters.'],
       required: [true, 'Post should contain some text!']
     },
     photos: {
@@ -27,6 +28,9 @@ const postSchema = new Schema(
         },
         message: 'Tags exceeds the limit of 10!'
       }
+    },
+    likes: {
+      type: [String]
     },
     privacy: {
       type: String,

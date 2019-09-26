@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import { Layout, Icon, Button, Drawer } from 'antd';
+import { Layout, Icon, Button, Drawer, Badge, Typography } from 'antd';
 import Menu from './Menu';
 import { showDrawer, hideDrawer } from '../../../actions/layout';
 import styles from './Navbar.module.scss';
 
 const { Header } = Layout;
+const { Text } = Typography;
 
 const Navbar = ({ show, showDrawer, hideDrawer }) => {
   const xs = useMediaQuery({
@@ -21,11 +22,17 @@ const Navbar = ({ show, showDrawer, hideDrawer }) => {
   return (
     <Header className={styles.styledHeader}>
       <Link to="/">
-        <Button type="link" size="large" ghost className={styles.styledLogo}>
-          <Icon type="bulb" />
-          {xs && <span>MyThoughts</span>}
-        </Button>
+        <Badge
+          count={<Text className={styles.styledBadge}>Beta</Text>}
+          offset={[-10, 20]}
+        >
+          <Button type="link" size="large" ghost className={styles.styledLogo}>
+            <Icon type="bulb" />
+            {xs && <span>MyThoughts</span>}
+          </Button>
+        </Badge>
       </Link>
+      &nbsp;
       {md ? (
         <Menu mode="horizontal" theme="dark" />
       ) : (

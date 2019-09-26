@@ -10,7 +10,11 @@ const Photo = ({ photos, title, postId }) =>
       ))}
     </Carousel>
   ) : (
-    <img alt={title} src={`/images/posts/${postId}/${photos[0]}`} />
+    <img
+      alt={title}
+      src={`/images/posts/${postId}/${photos[0]}`}
+      style={{ width: '100%' }}
+    />
   );
 
 Photo.propTypes = {

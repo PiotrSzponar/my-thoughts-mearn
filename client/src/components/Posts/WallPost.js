@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import { Card, Icon, Avatar, Typography, Tag } from 'antd';
+import { Card, Icon, Avatar, Typography, Tag, Button } from 'antd';
 import FromIcon from './FromIcon';
 import Photo from './Photo';
+import { likePosts } from '../../actions/post';
 
 const { Text, Title, Paragraph } = Typography;
 
-const Post = ({ author, post }) => (
+const Post = ({ author, post, likePosts }) => (
   <Card
     style={{ marginBottom: 24 }}
     title={
@@ -40,17 +42,17 @@ const Post = ({ author, post }) => (
       )
     }
     actions={
-      post.from === 'myself'
-        ? [
-            <Link to={`/post/${post.id}/edit`}>
-              <Icon type="edit" key="edit" /> Edit
-            </Link>,
-          ]
-        : [
-            <Link to={`/post/${post.id}/like`}>
-              <Icon type="like" key="like" /> 1
-            </Link>,
-          ]
+      post.from !== 'myself' && [
+        <Button
+          type="link"
+          size="small"
+          block
+          onClick={() => likePosts(post.id)}
+        >
+          <Icon type="like" key="like" />
+          {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
+        </Button>,
+      ]
     }
   >
     <Title level={4}>
@@ -78,6 +80,10 @@ const Post = ({ author, post }) => (
 Post.propTypes = {
   author: PropTypes.objectOf(PropTypes.string).isRequired,
   post: PropTypes.objectOf(PropTypes.any).isRequired,
+  likePosts: PropTypes.func.isRequired,
 };
 
-export default Post;
+export default connect(
+  null,
+  { likePosts },
+)(Post);

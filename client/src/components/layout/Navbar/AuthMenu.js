@@ -24,10 +24,10 @@ const AuthMenu = ({
         selectable={false}
         onClick={hideDrawer}
       >
-        <Menu.Item key="hot">
-          <Link to="/hot">
-            <Icon type="fire" />
-            Hot posts!
+        <Menu.Item key="add-post">
+          <Link to="/post/add">
+            <Icon type="plus-circle" />
+            Add post
           </Link>
         </Menu.Item>
         <Menu.Item key="search">

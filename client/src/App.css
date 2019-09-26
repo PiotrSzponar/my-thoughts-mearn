@@ -4,6 +4,11 @@
   white-space: pre;
 }
 
+.row {
+  max-width: 1400px;
+  margin: 0 auto !important;
+}
+
 .flex-row {
   max-width: 1400px;
   margin: 0 auto !important;

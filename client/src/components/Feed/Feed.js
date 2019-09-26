@@ -2,32 +2,38 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Masonry from 'react-masonry-css';
-import { Empty, Button, Icon, Spin } from 'antd';
-import { animateScroll as scroll } from 'react-scroll';
+import { useMediaQuery } from 'react-responsive';
+import { Row, Col, Empty, Button, Spin, Radio, Icon } from 'antd';
 import Post from '../Posts/WallPost';
-import { getPosts } from '../../actions/post';
+import { getPosts, clearPosts } from '../../actions/post';
 
-const ButtonGroup = Button.Group;
+const Feed = ({ post: { posts, loading, noData }, getPosts, clearPosts }) => {
+  const [page, setPage] = useState(2);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [sort, setSort] = useState(localStorage.sort || 'createdAt');
 
-const Feed = ({ post: { posts, loading }, getPosts }) => {
-  const [page, setPage] = useState(1);
+  const sm = useMediaQuery({ minDeviceWidth: 576 });
+  const md = useMediaQuery({ minDeviceWidth: 768 });
 
   useEffect(() => {
-    getPosts(page);
-  }, [getPosts, page]);
+    clearPosts();
+    getPosts(1, localStorage.sort);
+  }, [getPosts, clearPosts]);
 
-  const handlePagination = (type, pageNum) => {
-    if (type === 'next') {
-      setPage(pageNum + 1);
-      getPosts(page);
-    } else {
-      setPage(pageNum - 1);
-      getPosts(page);
-    }
-    scroll.scrollToTop();
+  const handleSort = type => {
+    localStorage.setItem('sort', type);
+    setSort(type);
+    clearPosts();
+    getPosts(1, localStorage.sort);
   };
 
-  if (loading) {
+  const handlePagination = pageNum => {
+    setFirstLoad(false);
+    getPosts(page, sort);
+    setPage(pageNum + 1);
+  };
+
+  if (loading && firstLoad) {
     return (
       <div className="spinWrapper">
         <Spin tip="Loading..." size="large" className="spin" />
@@ -37,14 +43,30 @@ const Feed = ({ post: { posts, loading }, getPosts }) => {
 
   return (
     <div style={{ margin: '0 auto', maxWidth: '1400px' }}>
-      {posts.length === 0 ? (
+      <Row>
+        <Col span={24} style={{ textAlign: 'center' }}>
+          <Radio.Group
+            onChange={e => handleSort(e.target.value)}
+            defaultValue={sort}
+            style={{ marginBottom: md ? 20 : 10, float: sm ? 'right' : 'none' }}
+          >
+            <Radio.Button value="createdAt">
+              <Icon type="calendar" /> &nbsp;New posts
+            </Radio.Button>
+            <Radio.Button value="likes">
+              <Icon type="like" /> &nbsp;Top liked
+            </Radio.Button>
+          </Radio.Group>
+        </Col>
+      </Row>
+      {noData && firstLoad ? (
         <Empty style={{ marginBottom: 24 }} />
       ) : (
         <Masonry
           breakpointCols={{
             default: 3,
             992: 2,
-            576: 1,
+            768: 1,
           }}
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
@@ -58,7 +80,7 @@ const Feed = ({ post: { posts, loading }, getPosts }) => {
               }}
               post={{
                 id: post._id,
-                date: post.updatedAt,
+                date: post.createdAt,
                 title: post.title,
                 photos: post.photos,
                 content: post.content,
@@ -66,30 +88,23 @@ const Feed = ({ post: { posts, loading }, getPosts }) => {
                 from: post.from,
                 privacy: post.privacy,
                 state: post.state,
+                likes: post.likes,
               }}
               key={post._id}
             />
           ))}
         </Masonry>
       )}
-      <ButtonGroup style={{ display: 'block', textAlign: 'center' }}>
-        <Button
-          type="primary"
-          disabled={page === 1}
-          onClick={() => handlePagination('prev', page)}
-        >
-          <Icon type="left" />
-          Previous
-        </Button>
-        <Button
-          type="primary"
-          disabled={posts.length === 0}
-          onClick={() => handlePagination('next', page)}
-        >
-          Next
-          <Icon type="right" />
-        </Button>
-      </ButtonGroup>
+      <Button
+        style={{ display: 'block', maxWidth: 400, margin: '0 auto' }}
+        type="primary"
+        disabled={noData}
+        loading={loading}
+        onClick={() => handlePagination(page)}
+        block
+      >
+        Load more...
+      </Button>
     </div>
   );
 };
@@ -105,5 +120,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getPosts },
+  { getPosts, clearPosts },
 )(Feed);

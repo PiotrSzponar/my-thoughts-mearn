@@ -99,16 +99,59 @@ exports.search = catchAsync(async (req, res, next) => {
 //  - get id from req.user/params and show basic info about user
 //  - get only 6 sample friends and number of all user friends
 exports.getUser = catchAsync(async (req, res, next) => {
-  const user =
+  let user = await User.findById(req.user.id).populate({
+    path: 'friends',
+    select: 'recipient'
+  });
+
+  const userFriends = user.friends.map(obj => obj.recipient);
+
+  user =
     req.route.path === '/me'
-      ? await User.findById(req.user.id).populate({
-          path: 'friends',
-          options: { sort: { updatedAt: 'desc' } }
-        })
+      ? await User.findById(req.user.id)
+          .populate({
+            path: 'friends',
+            select: 'recipient status',
+            options: { sort: { updatedAt: 'desc' } },
+            populate: {
+              path: 'recipient',
+              select: 'name photo'
+            }
+          })
+          .populate({
+            path: 'posts',
+            options: { sort: { createdAt: 'desc' } }
+          })
       : await User.findById(req.params.id)
           .populate({
             path: 'friends',
-            options: { sort: { updatedAt: 'desc' } }
+            select: 'recipient status',
+            options: { sort: { updatedAt: 'desc' } },
+            populate: {
+              path: 'recipient',
+              select: 'name photo'
+            }
+          })
+          .populate({
+            path: 'posts',
+            options: { sort: { createdAt: 'desc' } },
+            match: {
+              $or: [
+                {
+                  author: user.id
+                },
+                {
+                  $and: [{ privacy: 'public' }, { state: 'publish' }]
+                },
+                {
+                  $and: [
+                    { privacy: 'friends' },
+                    { state: 'publish' },
+                    { author: userFriends }
+                  ]
+                }
+              ]
+            }
           })
           .select(
             `${
@@ -125,8 +168,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
   const friendsList = user.friends
     .filter(el => el.status === 3)
     .map(obj => ({
-      userId: obj.recipient,
-      name: obj.name
+      userId: obj.recipient.id,
+      name: obj.recipient.name,
+      photo: obj.recipient.photo
     }))
     .slice(0, 6);
 
