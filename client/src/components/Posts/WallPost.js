@@ -10,7 +10,7 @@ import { likePosts } from '../../actions/post';
 
 const { Text, Title, Paragraph } = Typography;
 
-const Post = ({ author, post, likePosts, what = 'wall' }) => (
+const Post = ({ author, post, likePosts, what }) => (
   <Card
     style={{ marginBottom: 24 }}
     title={
@@ -84,11 +84,15 @@ const Post = ({ author, post, likePosts, what = 'wall' }) => (
   </Card>
 );
 
+Post.defaultProps = {
+  what: 'wall',
+};
+
 Post.propTypes = {
   author: PropTypes.objectOf(PropTypes.string).isRequired,
   post: PropTypes.objectOf(PropTypes.any).isRequired,
   likePosts: PropTypes.func.isRequired,
-  what: PropTypes.string.isRequired,
+  what: PropTypes.string,
 };
 
 export default connect(

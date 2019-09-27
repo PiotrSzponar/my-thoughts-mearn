@@ -35,7 +35,7 @@ export const getPost = id => async dispatch => {
 };
 
 // Get posts
-export const getPosts = (page = 1, sort = '', limit = 12) => async dispatch => {
+export const getPosts = (page = 1, sort = '', limit = 9) => async dispatch => {
   dispatch({
     type: POSTS_LOADING_TRUE,
   });
