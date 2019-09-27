@@ -42,27 +42,24 @@ const Post = ({ author, post, likePosts, what = 'wall' }) => (
       )
     }
     actions={
-      post.from !== 'myself' ? [
-        <Button
-          type="link"
-          size="small"
-          block
-          onClick={() => what === 'wall' ? likePosts(post.id) : false}
-        >
-          <Icon type="like" key="like" />
-          {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
-        </Button>,
-      ] : [
-        <Button
-          type="link"
-          size="small"
-          block
-          disabled
-        >
-          <Icon type="like" key="like" />
-          {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
-        </Button>,
-      ]
+      post.from !== 'myself'
+        ? [
+            <Button
+              type="link"
+              size="small"
+              block
+              onClick={() => (what === 'wall' ? likePosts(post.id) : false)}
+            >
+              <Icon type="like" key="like" />
+              {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
+            </Button>,
+          ]
+        : [
+            <Button type="link" size="small" block disabled>
+              <Icon type="like" key="like" />
+              {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
+            </Button>,
+          ]
     }
   >
     <Title level={4}>
@@ -91,6 +88,7 @@ Post.propTypes = {
   author: PropTypes.objectOf(PropTypes.string).isRequired,
   post: PropTypes.objectOf(PropTypes.any).isRequired,
   likePosts: PropTypes.func.isRequired,
+  what: PropTypes.string.isRequired,
 };
 
 export default connect(

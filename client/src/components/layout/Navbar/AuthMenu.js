@@ -76,6 +76,7 @@ AuthMenu.propTypes = {
   mode: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
   hideDrawer: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   photo: PropTypes.string,
   name: PropTypes.string,

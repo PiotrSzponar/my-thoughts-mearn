@@ -111,6 +111,7 @@ const Feed = ({ post: { posts, loading, noData }, getPosts, clearPosts }) => {
 
 Feed.propTypes = {
   getPosts: PropTypes.func.isRequired,
+  clearPosts: PropTypes.func.isRequired,
   post: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 

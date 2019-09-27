@@ -12,7 +12,12 @@ const FromIcon = ({ from, what }) => {
     );
   }
   if (from === 'friend') {
-    return <Icon type="team" title={what === 'post' ? 'Post from your friend' : 'Friend'} />;
+    return (
+      <Icon
+        type="team"
+        title={what === 'post' ? 'Post from your friend' : 'Friend'}
+      />
+    );
   }
   return '';
 };
