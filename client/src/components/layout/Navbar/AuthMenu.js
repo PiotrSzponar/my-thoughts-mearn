@@ -56,9 +56,6 @@ const AuthMenu = ({
           <Menu.Item key="profile">
             <Link to={`/user/${_id}`}>My profile</Link>
           </Menu.Item>
-          <Menu.Item key="posts">
-            <Link to={`/posts/${_id}`}>My posts</Link>
-          </Menu.Item>
           <Menu.Item key="logout" onClick={logout}>
             <Icon type="logout" />
             Logout

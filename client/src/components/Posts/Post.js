@@ -144,7 +144,7 @@ const Post = ({ match, getPost, likePost, post: { post, loading } }) => {
               type="secondary"
               style={{ display: 'block', textAlign: 'right' }}
             >
-              <FromIcon from={post.from} /> &nbsp;
+              <FromIcon from={post.from} what="post" /> &nbsp;
               <Moment
                 interval={30000}
                 fromNow

@@ -114,7 +114,7 @@ const ResetPass = ({ token, form, isLoading, stepCb, setAlert }) => {
           htmlType="submit"
           onClick={() => scroll.scrollToTop()}
         >
-          Register
+          Change password
         </Button>
       </Form.Item>
     </Form>

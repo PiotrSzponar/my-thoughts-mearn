@@ -115,12 +115,16 @@ exports.getUser = catchAsync(async (req, res, next) => {
             options: { sort: { updatedAt: 'desc' } },
             populate: {
               path: 'recipient',
-              select: 'name photo'
+              select: 'name photo updatedAt'
             }
           })
           .populate({
             path: 'posts',
-            options: { sort: { createdAt: 'desc' } }
+            options: { sort: { createdAt: 'desc' } },
+            populate: {
+              path: 'author',
+              select: 'name photo'
+            }
           })
       : await User.findById(req.params.id)
           .populate({
@@ -129,7 +133,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
             options: { sort: { updatedAt: 'desc' } },
             populate: {
               path: 'recipient',
-              select: 'name photo'
+              select: 'name photo updatedAt'
             }
           })
           .populate({
@@ -151,6 +155,10 @@ exports.getUser = catchAsync(async (req, res, next) => {
                   ]
                 }
               ]
+            },
+            populate: {
+              path: 'author',
+              select: 'name photo'
             }
           })
           .select(
@@ -170,16 +178,27 @@ exports.getUser = catchAsync(async (req, res, next) => {
     .map(obj => ({
       userId: obj.recipient.id,
       name: obj.recipient.name,
-      photo: obj.recipient.photo
+      photo: obj.recipient.photo,
+      since: obj.recipient.updatedAt
     }))
     .slice(0, 6);
+
+  let who;
+  if (userFriends.indexOf(req.params.id) !== -1) {
+    who = 'friend';
+  } else if (req.route.path === '/me') {
+    who = 'myself';
+  } else {
+    who = 'stranger';
+  }
 
   res.status(200).json({
     status: 'success',
     data: {
       ...user._doc,
       friendsCount: user.friends.length,
-      friends: friendsList
+      friends: friendsList,
+      who
     }
   });
 });

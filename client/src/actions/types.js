@@ -13,7 +13,6 @@ export const LOGOUT = 'LOGOUT';
 export const VERIFICATION_SUCCESS = 'VERIFICATION_SUCCESS';
 export const VERIFICATION_FAIL = 'VERIFICATION_FAIL';
 // POSTS
-// export const POST_LOADING_TRUE = 'POST_LOADING_TRUE';
 export const GET_POST = 'GET_POST';
 export const POSTS_LOADING_TRUE = 'POSTS_LOADING_TRUE';
 export const GET_POSTS = 'GET_POSTS';
@@ -23,3 +22,7 @@ export const POSTS_ERROR = 'POSTS_ERROR';
 // LIKE POST
 export const UPDATE_POST_LIKES = 'UPDATE_POST_LIKES';
 export const UPDATE_POSTS_LIKES = 'UPDATE_POSTS_LIKES';
+// USERS
+export const GET_USER = 'GET_USER';
+export const USER_LOADING_TRUE = 'USER_LOADING_TRUE';
+export const CLEAR_USER = 'CLEAR_USER';

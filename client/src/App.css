@@ -46,3 +46,12 @@
   top: 50%;
   transform: translateX(-50%);
 }
+
+.ant-list-item-meta-title {
+    margin-bottom: 0;
+}
+
+.ant-list-item-meta-description {
+    font-size: 12px;
+    line-height: 18px;
+}

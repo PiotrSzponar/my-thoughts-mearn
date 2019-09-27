@@ -16,6 +16,7 @@ const Landing = ({ isAuth, isLoading }) => {
       </div>
     );
   }
+
   if (isAuth) {
     return <Redirect to="/feed" />;
   }

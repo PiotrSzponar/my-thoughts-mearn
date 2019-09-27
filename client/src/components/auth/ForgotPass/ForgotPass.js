@@ -47,7 +47,7 @@ const ForgotPassForm = ({ isAuth, authLoading, match }) => {
 
   let stepsDirection;
   if (lg) {
-    stepsDirection = 'horizontal';
+    stepsDirection = 'vertical';
   } else if (md) {
     stepsDirection = 'vertical';
   } else if (sm) {

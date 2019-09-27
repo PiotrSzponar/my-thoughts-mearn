@@ -10,7 +10,7 @@ import { likePosts } from '../../actions/post';
 
 const { Text, Title, Paragraph } = Typography;
 
-const Post = ({ author, post, likePosts }) => (
+const Post = ({ author, post, likePosts, what = 'wall' }) => (
   <Card
     style={{ marginBottom: 24 }}
     title={
@@ -23,7 +23,7 @@ const Post = ({ author, post, likePosts }) => (
     }
     extra={
       <Text type="secondary">
-        <FromIcon from={post.from} /> &nbsp;
+        <FromIcon from={post.from} what="post" /> &nbsp;
         <Moment
           interval={30000}
           fromNow
@@ -42,12 +42,22 @@ const Post = ({ author, post, likePosts }) => (
       )
     }
     actions={
-      post.from !== 'myself' && [
+      post.from !== 'myself' ? [
         <Button
           type="link"
           size="small"
           block
-          onClick={() => likePosts(post.id)}
+          onClick={() => what === 'wall' ? likePosts(post.id) : false}
+        >
+          <Icon type="like" key="like" />
+          {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
+        </Button>,
+      ] : [
+        <Button
+          type="link"
+          size="small"
+          block
+          disabled
         >
           <Icon type="like" key="like" />
           {post.likes.length > 0 && <>&nbsp;{post.likes.length}</>}
